@@ -21,17 +21,14 @@ namespace Forum.Controllers
         
         public async Task<IActionResult> Index()
         {
-            return View(await _service.GetAll());
+            return View(await _service.GetAllAsync());
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([FromBody] PostModel postModel)
         {
-           
-                await _service.AddAsync(postModel);
+            await _service.AddAsync(postModel);
                 return RedirectToAction(nameof(Index));
-
-              
         }
         public IActionResult Create()
         {

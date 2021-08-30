@@ -7,6 +7,8 @@ namespace Forum.ViewModels.UserViewModel
         [Required]
         [Display(Name = "Email")]
         public string Email { get; set; }
+        
+       
          
         [Required]
         [DataType(DataType.Password)]

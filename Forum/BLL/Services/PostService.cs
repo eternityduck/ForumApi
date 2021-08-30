@@ -19,7 +19,7 @@ namespace BLL.Services
             _unitOfWork = unitOfWork;
         }
         
-        public async Task<IEnumerable<PostModel>> GetAll()
+        public async Task<IEnumerable<PostModel>> GetAllAsync()
         {
             var mapper = new MapperConfiguration(cfg => cfg.CreateMap<Post, PostModel>()).CreateMapper();
             return mapper.Map<IEnumerable<Post>, List<PostModel>>(await _unitOfWork.Posts.GetAllAsync());

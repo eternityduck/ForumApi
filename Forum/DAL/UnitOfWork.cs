@@ -8,6 +8,9 @@ namespace DAL
     public class UnitOfWork : IUnitOfWork
     {
         private readonly ForumContext _context;
+        public IPostRepository Posts { get; }
+        public ICommentRepository Comments { get; }
+        public IRepository<User> Users { get; }
         public void Dispose()
         {
             _context.Dispose();
@@ -20,9 +23,7 @@ namespace DAL
             Comments = new CommentRepository(_context);
             Users = new UserRepository(_context);
         }
-        public IPostRepository Posts { get; }
-        public ICommentRepository Comments { get; }
-        public IRepository<User> Users { get; }
+        
         public async Task<int> SaveAsync()
         {
             return await _context.SaveChangesAsync();

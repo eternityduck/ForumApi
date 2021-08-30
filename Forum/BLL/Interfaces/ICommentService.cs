@@ -1,6 +1,8 @@
-﻿namespace BLL.Interfaces
+﻿using BLL.Models;
+
+namespace BLL.Interfaces
 {
-    public class ICommentService
+    public interface ICommentService: ICrud<CommentModel>
     {
         
     }
