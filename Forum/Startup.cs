@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
+using BLL;
 using BLL.Interfaces;
 using BLL.Services;
 using DAL;
@@ -34,7 +36,8 @@ namespace Forum
         {
             
             services.AddDbContext<ForumContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), 
+                    b=>b.MigrationsAssembly("Forum")));
             
             services.AddIdentity<User, IdentityRole>(opts=> {
                     opts.Password.RequiredLength = 5;   
@@ -47,7 +50,10 @@ namespace Forum
                 })
                 .AddEntityFrameworkStores<ForumContext>();
             //services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
-            
+            var mapperProfile = new AutoMapperProfile();
+            var mapperConfiguration = new MapperConfiguration(cfg => cfg.AddProfile(mapperProfile));
+            services.AddScoped(m => new Mapper(mapperConfiguration));
+
             services.AddScoped<IPostService, PostService>();
             services.AddScoped<ICommentService, CommentService>();
             services.AddScoped<IUserRepository, UserRepository>();

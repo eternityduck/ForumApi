@@ -55,7 +55,6 @@ namespace BLL.Services
 
         public async Task DeleteByIdAsync(int modelId)
         {
-            
             await _mapper.Map<Task>(_unitOfWork.Posts.RemoveByIdAsync(modelId));
             await _unitOfWork.SaveAsync();
         }

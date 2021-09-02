@@ -8,32 +8,59 @@ using BLL.Models;
 using BLL.Services;
 using DAL.Models;
 using Forum.ViewModels.PostViewModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Identity;
 
 namespace Forum.Controllers
 {
     public class PostController : Controller
     {
         private readonly IPostService _service;
-
-        public PostController(IPostService service) => _service = service;
+        private readonly UserManager<User> _userManager;
+        public PostController(IPostService service, UserManager<User> userManager) => 
+            (_service, _userManager) = (service, userManager);
         
         
         public async Task<IActionResult> Index()
         {
             return View(await _service.GetAllAsync());
         }
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([FromForm] Post postModel)
+        public async Task<IActionResult> Create([FromForm] PostModel postModel)
         {
-            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<PostModel, Post>()).CreateMapper();
-            await _service.AddAsync(mapper.Map<PostModel>(postModel));
+            postModel.Author = await _userManager.GetUserAsync(User);
+            await _service.AddAsync(postModel);
             return RedirectToAction(nameof(Index));
         }
+        [Authorize]
         public IActionResult Create()
         {
             return View();
         }
+
+        public async Task<IActionResult> Delete(int id)
+        {
+
+            var post = await _service.GetByIdAsync(id);
+            if (post == null)
+            {
+                return NotFound();
+            }
+
+            return View(post);
+        }
+
+        // POST: Customers/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            await _service.DeleteByIdAsync(id);
+            return RedirectToAction(nameof(Index));
+        }
+        
     }
-}
+    }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using DAL.Models;
 
 namespace BLL.Models
 {
@@ -8,8 +9,9 @@ namespace BLL.Models
         public int Id { get; set; }
         public string Title { get; set; }
         public string Text { get; set; }
+        public string AuthorId { get; set; }
         public DateTime CreatedAt{ get; set; }
-        public int AuthorId { get; set; }
+        public User Author { get; set; }
         public ICollection<int> CommentIds { get; set; }
     }
 }

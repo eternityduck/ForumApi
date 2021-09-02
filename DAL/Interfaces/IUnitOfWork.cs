@@ -8,7 +8,7 @@ namespace DAL.Interfaces
     {
         IPostRepository Posts { get;}
         ICommentRepository Comments { get;}
-        IRepository<User> Users { get;}
+        IUserRepository Users { get;}
         Task<int> SaveAsync();
     }
 }

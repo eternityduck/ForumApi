@@ -10,7 +10,7 @@ namespace DAL
         private readonly ForumContext _context;
         public IPostRepository Posts { get; }
         public ICommentRepository Comments { get; }
-        public IRepository<User> Users { get; }
+        public IUserRepository Users { get; }
         public void Dispose()
         {
             _context.Dispose();
