@@ -24,14 +24,16 @@ namespace Forum.Controllers
         
         public async Task<IActionResult> Index()
         {
-            return View(await _service.GetAllAsync());
+            var models = await _service.GetAllAsync();
+            return View(models);
         }
         
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([FromForm] PostModel postModel)
         {
-            postModel.Author = await _userManager.GetUserAsync(User);
+            var user = await _userManager.GetUserAsync(User);
+            postModel.AuthorName = user.UserName;
             await _service.AddAsync(postModel);
             return RedirectToAction(nameof(Index));
         }

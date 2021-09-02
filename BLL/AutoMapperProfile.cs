@@ -14,7 +14,7 @@ namespace BLL
                     c.MapFrom(posts => posts.Comments.Select(x => x.Id)))
                 .ForMember(p => p.AuthorId, c => 
                     c.MapFrom(x => x.AuthorId))
-                .ForMember(p => p.Author, c=>c.MapFrom(x=> x.Author))
+                .ForMember(p => p.AuthorName, c=>c.MapFrom(x=> x.Author.UserName))
                 .ReverseMap();
             CreateMap<Comment, CommentModel>().ReverseMap();
             CreateMap<User, UserModel>().ReverseMap();

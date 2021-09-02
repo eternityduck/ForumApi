@@ -8,7 +8,7 @@ using DAL.Models;
 
 namespace BLL.Services
 {
-    public class UserService : IUserService
+    public class UserService
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly Mapper _mapper;
@@ -21,7 +21,7 @@ namespace BLL.Services
         public async Task<IEnumerable<UserModel>> GetAllAsync()=>
             _mapper.Map<IEnumerable<User>, List<UserModel>>(await _unitOfWork.Users.GetAllAsync());
 
-        public async Task<UserModel> GetByIdAsync(int id)=>
+        public async Task<UserModel> GetByIdAsync(string id)=>
             _mapper.Map<UserModel>(await _unitOfWork.Users.GetByIdAsync(id));
 
         public Task AddAsync(UserModel model)

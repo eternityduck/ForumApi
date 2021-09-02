@@ -5,6 +5,6 @@ namespace DAL.Interfaces
 {
     public interface IUserRepository: IRepository<User>
     {
-        Task<User> GetByIdAsync(int id);
+        Task<User> GetByIdAsync(string id);
     }
 }

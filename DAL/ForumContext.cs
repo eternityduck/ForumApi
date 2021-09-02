@@ -9,7 +9,7 @@ namespace DAL
         public ForumContext(DbContextOptions<ForumContext> options)
             : base(options)
         {
-            
+            Database.EnsureCreated();
         }
        
         public DbSet<Post> Posts { get; set; }

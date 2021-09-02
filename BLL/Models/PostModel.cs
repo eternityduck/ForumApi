@@ -11,7 +11,7 @@ namespace BLL.Models
         public string Text { get; set; }
         public string AuthorId { get; set; }
         public DateTime CreatedAt{ get; set; }
-        public User Author { get; set; }
+        public string AuthorName { get; set; }
         public ICollection<int> CommentIds { get; set; }
     }
 }

@@ -8,58 +8,58 @@ namespace DAL.Interfaces
 {
     public abstract class Repository<T> : IRepository<T> where T : class
     {
-        private readonly ForumContext _context;
-        private readonly DbSet<T> _dbSet;
+        protected readonly ForumContext Context;
+        protected readonly DbSet<T> DbSet;
 
         public Repository(ForumContext context)
         {
-            _context = context;
-            _dbSet = context.Set<T>();
+            Context = context;
+            DbSet = context.Set<T>();
         }
 
-        public Task<List<T>> GetAllAsync()
+        public virtual Task<List<T>> GetAllAsync()
         {
-            return _dbSet.AsNoTracking().ToListAsync();
+            return DbSet.AsNoTracking().ToListAsync();
         }
 
         public T GetById(int id)
         {
-            return _dbSet.Find(id);
+            return DbSet.Find(id);
         }
 
         public IEnumerable<T> Get(Func<T, bool> predicate)
         {
-            return _dbSet.AsNoTracking().Where(predicate).ToList();
+            return DbSet.AsNoTracking().Where(predicate).ToList();
         }
         
         public async Task AddAsync(T item)
         {
             
-            await _dbSet.AddAsync(item);
-            await _context.SaveChangesAsync();
+            await DbSet.AddAsync(item);
+            await Context.SaveChangesAsync();
         }
 
         public Task UpdateAsync(T item)
         {
-            _context.Entry(item).State = EntityState.Modified;
-            return _context.SaveChangesAsync();
+            Context.Entry(item).State = EntityState.Modified;
+            return Context.SaveChangesAsync();
         }
 
         public Task RemoveAsync(T item)
         {
-            _dbSet.Remove(item);
-            return _context.SaveChangesAsync();
+            DbSet.Remove(item);
+            return Context.SaveChangesAsync();
         }
 
         public bool Any(Func<T, bool> predicate)
         {
-            return _dbSet.Any(predicate);
+            return DbSet.Any(predicate);
         }
 
         public Task RemoveByIdAsync(int id)
         {
-            _dbSet.Remove(GetById(id));
-            return _context.SaveChangesAsync();
+            DbSet.Remove(GetById(id));
+            return Context.SaveChangesAsync();
         }
     }
 }

@@ -21,8 +21,13 @@ namespace BLL.Services
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<PostModel>> GetAllAsync() =>
-            _mapper.Map<IEnumerable<Post>, List<PostModel>>(await _unitOfWork.Posts.GetAllAsync());
+        public async Task<IEnumerable<PostModel>> GetAllAsync()
+        {
+            var result = _mapper.Map<IEnumerable<Post>, List<PostModel>>(await _unitOfWork.Posts.GetAllAsync());
+            
+            return result;
+        }
+            
         
         public async Task<PostModel> GetByIdAsync(int id) =>
             _mapper.Map<PostModel>(await _unitOfWork.Posts.GetByIdAsync(id));
@@ -36,7 +41,8 @@ namespace BLL.Services
             if (string.IsNullOrEmpty(model.Title))
                 throw new ForumException("The title can not be empty");
 
-            await _unitOfWork.Posts.AddAsync(_mapper.Map<Post>(model));
+            var item = _mapper.Map<Post>(model);
+            await _unitOfWork.Posts.AddAsync(item);
             await _unitOfWork.SaveAsync();
         }
 
