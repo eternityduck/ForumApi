@@ -25,10 +25,11 @@ namespace Forum.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([FromBody] PostModel postModel)
+        public async Task<IActionResult> Create([FromForm] Post postModel)
         {
-            await _service.AddAsync(postModel);
-                return RedirectToAction(nameof(Index));
+            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<PostModel, Post>()).CreateMapper();
+            await _service.AddAsync(mapper.Map<PostModel>(postModel));
+            return RedirectToAction(nameof(Index));
         }
         public IActionResult Create()
         {

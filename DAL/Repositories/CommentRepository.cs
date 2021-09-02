@@ -11,9 +11,7 @@ namespace DAL.Interfaces
         {
             _context = context;
         }
-
-      
-
+        
         public async Task<Comment> GetByIdAsync(int id)
         {
             return await _context.Comments.FirstOrDefaultAsync(x => x.Id == id);

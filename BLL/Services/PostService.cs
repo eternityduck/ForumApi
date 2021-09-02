@@ -13,24 +13,20 @@ namespace BLL.Services
     public class PostService : IPostService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly Mapper _mapper;
 
-        public PostService(IUnitOfWork unitOfWork)
+        public PostService(IUnitOfWork unitOfWork, Mapper mapper)
         {
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
+
+        public async Task<IEnumerable<PostModel>> GetAllAsync() =>
+            _mapper.Map<IEnumerable<Post>, List<PostModel>>(await _unitOfWork.Posts.GetAllAsync());
         
-        public async Task<IEnumerable<PostModel>> GetAllAsync()
-        {
-            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<Post, PostModel>()).CreateMapper();
-            return mapper.Map<IEnumerable<Post>, List<PostModel>>(await _unitOfWork.Posts.GetAllAsync());
-        }
-
-        public async Task<PostModel> GetByIdAsync(int id)
-        {
-            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<Post, PostModel>()).CreateMapper();
-            return mapper.Map<PostModel>(await _unitOfWork.Posts.GetByIdAsync(id));
-        }
-
+        public async Task<PostModel> GetByIdAsync(int id) =>
+            _mapper.Map<PostModel>(await _unitOfWork.Posts.GetByIdAsync(id));
+        
         public async Task AddAsync(PostModel model)
         {
             if (model == null)
@@ -39,8 +35,8 @@ namespace BLL.Services
                 throw new ForumException("The post can not be null");
             if (string.IsNullOrEmpty(model.Title))
                 throw new ForumException("The title can not be empty");
-            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<Post, PostModel>()).CreateMapper();
-            await _unitOfWork.Posts.AddAsync(mapper.Map<Post>(model));
+
+            await _unitOfWork.Posts.AddAsync(_mapper.Map<Post>(model));
             await _unitOfWork.SaveAsync();
         }
 
@@ -52,15 +48,15 @@ namespace BLL.Services
                 throw new ForumException("The post can not be null");
             if (string.IsNullOrEmpty(model.Title))
                 throw new ForumException("The title can not be empty");
-            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<Post, PostModel>()).CreateMapper();
-            await _unitOfWork.Posts.UpdateAsync(mapper.Map<Post>(model));
+            
+            await _unitOfWork.Posts.UpdateAsync(_mapper.Map<Post>(model));
             await _unitOfWork.SaveAsync();
         }
 
         public async Task DeleteByIdAsync(int modelId)
         {
-            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<Post, PostModel>()).CreateMapper();
-            await mapper.Map<Task>(_unitOfWork.Posts.RemoveByIdAsync(modelId));
+            
+            await _mapper.Map<Task>(_unitOfWork.Posts.RemoveByIdAsync(modelId));
             await _unitOfWork.SaveAsync();
         }
     }

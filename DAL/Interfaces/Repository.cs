@@ -31,11 +31,10 @@ namespace DAL.Interfaces
         {
             return _dbSet.AsNoTracking().Where(predicate).ToList();
         }
-
         
-
         public async Task AddAsync(T item)
         {
+            
             await _dbSet.AddAsync(item);
             await _context.SaveChangesAsync();
         }
