@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
 using BLL.Interfaces;
 using BLL.Models;
-using BLL.Services;
 using DAL.Models;
 using Forum.ViewModels.PostViewModel;
 using Microsoft.AspNetCore.Authorization;
@@ -32,8 +29,8 @@ namespace Forum.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([FromForm] PostModel postModel)
         {
-            var user = await _userManager.GetUserAsync(User);
-            postModel.AuthorName = user.UserName;
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            postModel.AuthorName = user.Name;
             await _service.AddAsync(postModel);
             return RedirectToAction(nameof(Index));
         }
@@ -55,13 +52,35 @@ namespace Forum.Controllers
             return View(post);
         }
 
-        // POST: Customers/Delete/5
+       
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             await _service.DeleteByIdAsync(id);
             return RedirectToAction(nameof(Index));
+        }
+        public async Task<IActionResult> Edit(int id)
+        {
+            return View(await _service.GetByIdAsync(id));
+        }
+        
+        [HttpPost]
+        public async Task<IActionResult> Edit(int id, [Bind("Id, Title, Text, AuthorName, AuthorId, Comments")] PostModel post)
+        {
+            await _service.UpdateAsync(post);
+            return RedirectToAction(nameof(Index));
+        }
+        public async Task<IActionResult> Details(int id)
+        {
+            try
+            {
+                return View(await _service.GetByIdAsync(id));
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
         }
         
     }

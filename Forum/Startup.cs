@@ -46,7 +46,7 @@ namespace Forum
                     opts.Password.RequireUppercase = false; 
                     opts.Password.RequireDigit = true; 
                     opts.User.RequireUniqueEmail = true;    
-                    opts.User.AllowedUserNameCharacters = ".@abcdefghijklmnopqrstuvwxyz1234567890";
+                    opts.User.AllowedUserNameCharacters = ".@abcdefghijklmnopqrstuvwxyz1234567890ABCDEFGHIJKLMNOPRSTUVWZYX"; 
                 })
                 .AddEntityFrameworkStores<ForumContext>();
             //services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
