@@ -32,7 +32,7 @@ namespace Forum.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("PostId")
+                    b.Property<int?>("PostId")
                         .HasColumnType("int");
 
                     b.Property<string>("Text")
@@ -306,9 +306,7 @@ namespace Forum.Migrations
 
                     b.HasOne("DAL.Models.Post", "Post")
                         .WithMany("Comments")
-                        .HasForeignKey("PostId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("PostId");
 
                     b.Navigation("Author");
 
@@ -321,11 +319,13 @@ namespace Forum.Migrations
                         .WithMany()
                         .HasForeignKey("AuthorId");
 
-                    b.HasOne("DAL.Models.Topic", null)
+                    b.HasOne("DAL.Models.Topic", "Topic")
                         .WithMany("Posts")
                         .HasForeignKey("TopicId");
 
                     b.Navigation("Author");
+
+                    b.Navigation("Topic");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

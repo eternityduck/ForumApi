@@ -1,4 +1,4 @@
-﻿@model IEnumerable<BLL.Models.PostModel>
+﻿@model IEnumerable<BLL.Models.CommentModel>
 
 @{
     ViewData["Title"] = "Orders";
@@ -19,7 +19,7 @@
             @Html.DisplayNameFor(model => model.Author.Name)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Title)
+            @Html.DisplayNameFor(model => model.Text)
         </th>
         <th></th>
     </tr>
@@ -35,11 +35,10 @@
                 @Html.DisplayFor(modelItem => item.Author.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Title)
+                @Html.DisplayFor(modelItem => item.Text)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
                 <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
             </td>
 

@@ -1,24 +1,26 @@
 ﻿using System;
 using System.Threading.Tasks;
-using AutoMapper;
 using BLL.Interfaces;
 using BLL.Models;
 using DAL.Models;
-using Forum.ViewModels.PostViewModel;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Forum.Controllers
 {
-    public class PostController : Controller
+    public class CommentController : Controller
     {
-        private readonly IPostService _service;
+        private readonly ICommentService _service;
+        private readonly IPostService _postService;
         private readonly UserManager<User> _userManager;
-        public PostController(IPostService service, UserManager<User> userManager) => 
+        public CommentController(ICommentService service, UserManager<User> userManager, IPostService postService)
+        {
+            _postService = postService;
             (_service, _userManager) = (service, userManager);
-        
-        
+        }
+
+
         public async Task<IActionResult> Index()
         {
             var models = await _service.GetAllAsync();
@@ -27,11 +29,14 @@ namespace Forum.Controllers
         
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([FromForm] PostModel postModel)
+        public async Task<IActionResult> Create(int id, [FromForm] CommentModel commentModel)
         {
+            //TODO
             var user = await _userManager.GetUserAsync(HttpContext.User);
-            postModel.Author = user;
-            await _service.AddAsync(postModel);
+            commentModel.Author = user;
+            commentModel.CreatedAt = DateTime.Now;
+            commentModel.Post = await _postService.GetByIdAsync(id);
+            await _service.AddAsync(commentModel);
             return RedirectToAction(nameof(Index));
         }
         [Authorize]
@@ -66,22 +71,11 @@ namespace Forum.Controllers
         }
         
         [HttpPost]
-        public async Task<IActionResult> Edit(int id, [Bind("Id, Title, Text, Author, CreatedAt")] PostModel post)
+        public async Task<IActionResult> Edit(int id, [Bind("Id, Title, Text, Author, CreatedAt")] CommentModel comment)
         {
-            await _service.UpdateAsync(post);
+            await _service.UpdateAsync(comment);
             return RedirectToAction(nameof(Index));
         }
-        public async Task<IActionResult> Details(int id)
-        {
-            try
-            {
-                return View(await _service.GetByIdAsync(id));
-            }
-            catch (Exception)
-            {
-                return BadRequest();
-            }
-        }
-        
+       
     }
-    }
+}
