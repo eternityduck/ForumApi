@@ -57,10 +57,9 @@ namespace Forum
             services.AddScoped<IPostService, PostService>();
             services.AddScoped<ICommentService, CommentService>();
             services.AddScoped<IUserRepository, UserRepository>();
-            services.AddScoped<IPostRepository, PostRepository>();
             services.AddScoped<ICommentRepository, CommentRepository>();
-            services.AddScoped<IUnitOfWork, UnitOfWork>();
-            services.AddScoped<IRepository<Post>, PostRepository>();
+            services.AddScoped<ITopicService, TopicService>();
+           
             services.AddControllersWithViews();
         }
 
