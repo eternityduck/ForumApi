@@ -10,6 +10,6 @@ namespace DAL.Models
         public string Description { get; set; }
         public DateTime CreatedAt { get; set; }
         
-        public IEnumerable<Post> Posts { get; set; }
+        public ICollection<Post> Posts { get; set; }
     }
 }

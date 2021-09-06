@@ -11,7 +11,7 @@ namespace DAL.Interfaces
         T GetById(int id);
         IEnumerable<T> Get(Func<T, bool> predicate);
         Task RemoveAsync(T item);
-        Task UpdateAsync(T item);
+        void Update(T item);
         bool Any(Func<T, bool> predicate);
         Task RemoveByIdAsync(int id);
     }

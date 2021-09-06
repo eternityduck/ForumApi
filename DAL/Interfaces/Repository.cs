@@ -34,15 +34,12 @@ namespace DAL.Interfaces
         
         public async Task AddAsync(T item)
         {
-            
-            await DbSet.AddAsync(item);
-            await Context.SaveChangesAsync();
+             await DbSet.AddAsync(item);
         }
 
-        public Task UpdateAsync(T item)
+        public void Update(T item)
         {
             Context.Entry(item).State = EntityState.Modified;
-            return Context.SaveChangesAsync();
         }
 
         public Task RemoveAsync(T item)

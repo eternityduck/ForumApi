@@ -1,4 +1,5 @@
 ﻿using System;
+using DAL.Models;
 
 namespace BLL.Models
 {
@@ -6,8 +7,8 @@ namespace BLL.Models
     {
         public int Id { get; set; }
         public string Text { get; set; }
-        public string AuthorId { get; set; }
+        public User Author { get; set; }
         public DateTime CreatedAt { get; set; }
-        public int PostId { get; set; }
+        public PostModel Post { get; set; }
     }
 }

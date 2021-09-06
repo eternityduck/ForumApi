@@ -55,7 +55,7 @@ namespace BLL.Services
             if (string.IsNullOrEmpty(model.Title))
                 throw new ForumException("The title can not be empty");
             
-            await _unitOfWork.Posts.UpdateAsync(_mapper.Map<Post>(model));
+             _unitOfWork.Posts.Update(_mapper.Map<Post>(model));
             await _unitOfWork.SaveAsync();
         }
 

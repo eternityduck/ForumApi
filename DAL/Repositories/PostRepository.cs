@@ -13,14 +13,16 @@ namespace DAL.Repositories
 
         public async Task<Post> GetByIdAsync(int id)
         {
-            return await Context.Posts.FirstOrDefaultAsync(x => x.Id == id);
+            return await Context.Posts.Include(x => x.Author)
+                .Include(x => x.Comments).ThenInclude(x => x.Author)
+                .FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public override Task<List<Post>> GetAllAsync()
         {
             var result = DbSet.AsNoTracking()
                 .Include(x => x.Author)
-                .Include(x => x.Comments)
+                .Include(x => x.Comments).ThenInclude(x => x.Author)
                 .ToListAsync();
 
             return result;

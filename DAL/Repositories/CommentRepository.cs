@@ -1,8 +1,9 @@
 ﻿using System.Threading.Tasks;
+using DAL.Interfaces;
 using DAL.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace DAL.Interfaces
+namespace DAL.Repositories
 {
     public class CommentRepository : Repository<Comment>, ICommentRepository
     {

@@ -9,9 +9,9 @@ namespace BLL.Models
         public int Id { get; set; }
         public string Title { get; set; }
         public string Text { get; set; }
-        public string AuthorId { get; set; }
+        
         public DateTime CreatedAt{ get; set; }
-        public string AuthorName { get; set; }
-        public ICollection<int> CommentIds { get; set; }
+        public User Author { get; set; }
+        public ICollection<CommentModel> Comments { get; set; }
     }
 }

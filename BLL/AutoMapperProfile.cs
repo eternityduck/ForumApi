@@ -10,13 +10,13 @@ namespace BLL
         public AutoMapperProfile()
         {
             CreateMap<Post, PostModel>()
-                .ForMember(p => p.CommentIds, c =>
-                    c.MapFrom(posts => posts.Comments.Select(x => x.Id)))
-                .ForMember(p => p.AuthorId, c => 
-                    c.MapFrom(x => x.AuthorId))
-                .ForMember(p => p.AuthorName, c=>c.MapFrom(x=> x.Author.UserName))
+                .ForMember(p => p.Comments, c =>
+                    c.MapFrom(posts => posts.Comments))
+                // .ForMember(p => p.AuthorName, c => 
+                //     c.MapFrom(x => x.Author.UserName))
                 .ReverseMap();
-            CreateMap<Comment, CommentModel>().ReverseMap();
+            CreateMap<Comment, CommentModel>()
+                .ReverseMap();
             CreateMap<User, UserModel>().ReverseMap();
         }
     }
