@@ -2,7 +2,7 @@
 
 namespace Forum.ViewModels.CommentViewModel
 {
-    public class CommentViewModel
+    public class CommentIndexViewModel
     {
         public int Id { get; set; }
 
@@ -11,15 +11,15 @@ namespace Forum.ViewModels.CommentViewModel
         public string AuthorImageUrl { get; set; }
         //public bool IsAuthorAdmin { get; set; }
 
-        public DateTime Date { get; set; }
-        public string ReplyContent { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public string Content { get; set; }
 
         public int PostId { get; set; }
         public string PostTitle { get; set; }
         public string PostContent { get; set; }
 
-        public string ForumName { get; set; }
+        public string TopicName { get; set; }
         //public string ForumImageUrl { get; set; }
-        public int ForumId { get; set; }
+        public int TopicId { get; set; }
     }
 }

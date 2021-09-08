@@ -21,13 +21,13 @@ namespace Forum.Controllers
 
         public IActionResult Index()
         {
-            var forums = _topicService.GetAllAsync().Result.Select(f => new TopicListViewModel
+            var forums = _topicService.GetAllAsync().Result.Select(topic => new TopicListViewModel
             {
-                Id = f.Id,
-                Name = f.Title,
-                Description = f.Description,
-                NumberOfPosts = f.Posts?.Count() ?? 0,
-
+                Id = topic.Id,
+                Name = topic.Title,
+                Description = topic.Description,
+                NumberOfPosts = topic.Posts?.Count() ?? 0,
+                NumberOfUsers = _topicService.GetUsers(topic.Id).Count(),
             });
 
             var forumListingModels = forums as IList<TopicListViewModel> ?? forums.ToList();
@@ -54,7 +54,7 @@ namespace Forum.Controllers
             var postListings = posts.Select(post => new PostListViewModel()
             {
                 Id = post.Id,
-                Topic = BuildForumListing(post),
+                Topic = BuildPostListing(post),
                 Author = post.Author.UserName,
                 AuthorId = post.Author.Id,
                 Title = post.Title,
@@ -67,25 +67,25 @@ namespace Forum.Controllers
                 EmptySearchResults = noResults,
                 Posts = postListings,
                 SearchQuery = searchQuery,
-                Topic = BuildForumListing(topic)
+                Topic = BuildTopicList(topic)
             };
 
             return View(model);
         }
-        private static TopicListViewModel BuildForumListing(Topic topic)
+        private static TopicListViewModel BuildTopicList(Topic topic)
         {
             return new TopicListViewModel
             {
                 Id = topic.Id,
                 Name = topic.Title,
-                Description = topic.Description
+                Description = topic.Description,
             };
         }
 
-        private static TopicListViewModel BuildForumListing(Post post)
+        private static TopicListViewModel BuildPostListing(Post post)
         {
             var topic = post.Topic;
-            return BuildForumListing(topic);
+            return BuildTopicList(topic);
         }
 
     }

@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using BLL.Interfaces;
 using DAL.Models;
+using Forum.ViewModels.CommentViewModel;
 using Forum.ViewModels.PostViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -22,21 +25,40 @@ namespace Forum.Controllers
         }
 
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int id)
         {
-            var models = await _service.GetAllAsync();
-            return View(models);
+            var post = await _service.GetByIdAsync(id);
+            var comments = GetComments(post).OrderBy(x => x.CreatedAt);
+            var model = new PostIndexPostViewModel()
+            {
+                Id = post.Id,
+                Title = post.Title,
+                Text = post.Text,
+                AuthorId = post.Author.Id,
+                AuthorName = post.Author.Name,
+                AuthorImageUrl = post.Author.ProfileImage,
+                CreatedAt = post.CreatedAt,
+                Comments = comments,
+                TopicId = post.Topic.Id,
+                TopicName = post.Topic.Title
+            };
+            return View(model);
         }
-        // [HttpPost]
-        // [ValidateAntiForgeryToken]
-        // public async Task<IActionResult> Create([FromForm] PostModel postModel)
-        // {
-        //     var user = await _userManager.GetUserAsync(HttpContext.User);
-        //     postModel.Author = user;
-        //     await _service.AddAsync(postModel);
-        //     return RedirectToAction(nameof(Index));
-        // }
-        
+
+        private IEnumerable<CommentIndexViewModel> GetComments(Post post)
+        {
+            return post.Comments.Select(c => new CommentIndexViewModel()
+            {
+                Id = c.Id,
+                AuthorName = c.Author.Name,
+                AuthorId = c.Author.Id,
+                AuthorImageUrl = c.Author.ProfileImage,
+                CreatedAt = c.CreatedAt,
+                Content = c.Text
+            });
+        }
+
+
         // [HttpPost]
         // [ValidateAntiForgeryToken]
         // public async Task<IActionResult> Create([FromForm] Post postModel)
@@ -110,6 +132,7 @@ namespace Forum.Controllers
                 TopicName = forum.Title,
                 TopicId = forum.Id,
                 AuthorName = User.Identity.Name,
+                
             };
 
             return View(model);

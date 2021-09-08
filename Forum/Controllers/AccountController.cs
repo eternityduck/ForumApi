@@ -1,6 +1,8 @@
 ﻿using System.Threading.Tasks;
+using BLL.Interfaces;
 using DAL.Models;
 using Forum.ViewModels.UserViewModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,11 +12,12 @@ namespace Forum.Controllers
     {
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
-
+        //private readonly IUserService _userService;
         public AccountController(UserManager<User> userManager, SignInManager<User> signInManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            //_userService = userService;
         }
 
         [HttpGet]
@@ -83,6 +86,21 @@ namespace Forum.Controllers
         {
             await _signInManager.SignOutAsync();
             return RedirectToAction("Index", "Home");
+        }
+
+        [Authorize]
+        public async Task<IActionResult> Details(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            var model = new Profile()
+            {
+                UserId = user.Id,
+                UserName = user.UserName,
+                Email = user.Email,
+                Name = user.Name,
+                AccountCreatedAt = user.MemberSince,
+            };
+            return View(model);
         }
     }
 }

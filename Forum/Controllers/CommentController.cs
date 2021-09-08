@@ -25,24 +25,24 @@ namespace Forum.Controllers
         
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddComment([FromForm] CommentViewModel commentModel)
+        public async Task<IActionResult> AddComment([FromForm] CommentIndexViewModel commentIndexModel)
         {
             
             var userId = _userManager.GetUserId(User);
             var user = await _userManager.FindByIdAsync(userId);
-            var comment = CommentCreate(commentModel, user);
+            var comment = CommentCreate(commentIndexModel, user);
         
             await _postService.AddCommentAsync(comment);
             
-            return RedirectToAction("Index", "Post", new { id = commentModel.PostId });
+            return RedirectToAction("Index", "Post", new { id = commentIndexModel.PostId });
         }
-        private Comment CommentCreate(CommentViewModel model, User user)
+        private Comment CommentCreate(CommentIndexViewModel model, User user)
         {
             var post = _postService.GetById(model.PostId);
             return new Comment()
             {
                 Post = post,
-                Text = model.ReplyContent,
+                Text = model.Content,
                 CreatedAt = DateTime.Now,
                 Author = user
             };
@@ -54,20 +54,20 @@ namespace Forum.Controllers
             var topic = await _topicService.GetByIdAsync(post.Topic.Id);
             var user = await _userManager.FindByNameAsync(User.Identity.Name);
                  
-            var model = new CommentViewModel()
+            var model = new CommentIndexViewModel()
             {
                 PostContent = post.Text,
                 PostTitle = post.Title,
                 PostId = post.Id,
         
-                ForumName = topic.Title,
-                ForumId = topic.Id,
+                TopicName = topic.Title,
+                TopicId = topic.Id,
         
                 AuthorName = User.Identity.Name,
                 AuthorImageUrl = user.ProfileImage,
                 AuthorId = user.Id,
                 
-                Date = DateTime.Now
+                CreatedAt = DateTime.Now
             };
         
             return View(model);
