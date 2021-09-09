@@ -1,8 +1,10 @@
-﻿using BLL.Models;
+﻿using System.Collections.Generic;
+using BLL.Models;
+using DAL.Models;
 
 namespace BLL.Interfaces
 {
-    public interface IUserService : ICrud<UserModel>
+    public interface IUserService : ICrud<User>
     {
         
     }
