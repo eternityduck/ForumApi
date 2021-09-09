@@ -64,7 +64,7 @@ namespace Forum.Controllers
                 TopicId = topic.Id,
         
                 AuthorName = User.Identity.Name,
-                AuthorImageUrl = user.ProfileImage,
+               
                 AuthorId = user.Id,
                 
                 CreatedAt = DateTime.Now

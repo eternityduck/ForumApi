@@ -15,7 +15,6 @@ namespace Forum.ViewModels.PostViewModel
 
         public int TopicId { get; set; }
         public string TopicName { get; set; }
-        public string ForumImageUrl { get; set; }
 
         public int RepliesCount { get; set; }
     }

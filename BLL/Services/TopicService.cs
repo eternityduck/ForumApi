@@ -71,16 +71,7 @@ namespace BLL.Services
             await _context.SaveChangesAsync();
         }
 
-        public Post GetLatestPost(int topicId)
-        {
-            var posts = GetById(topicId);
-            if (posts != null)
-            {
-                return GetById(topicId).Posts.OrderByDescending(x => x.CreatedAt).FirstOrDefault();
-            }
-
-            return new Post();
-        }
+        
         public Topic GetById(int id)
         {
             var topic = _context.Topics

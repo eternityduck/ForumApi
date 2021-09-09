@@ -36,7 +36,6 @@ namespace Forum.Controllers
                 Text = post.Text,
                 AuthorId = post.Author.Id,
                 AuthorName = post.Author.Name,
-                AuthorImageUrl = post.Author.ProfileImage,
                 CreatedAt = post.CreatedAt,
                 Comments = comments,
                 TopicId = post.Topic.Id,
@@ -52,7 +51,7 @@ namespace Forum.Controllers
                 Id = c.Id,
                 AuthorName = c.Author.Name,
                 AuthorId = c.Author.Id,
-                AuthorImageUrl = c.Author.ProfileImage,
+                
                 CreatedAt = c.CreatedAt,
                 Content = c.Text
             });
@@ -74,17 +73,7 @@ namespace Forum.Controllers
         //     return View();
         // }
 
-        // public async Task<IActionResult> Delete(int id)
-        // {
-        //
-        //     var post = await _service.GetByIdAsync(id);
-        //     if (post == null)
-        //     {
-        //         return NotFound();
-        //     }
-        //
-        //     return View(post);
-        // }
+       
 
        
         [HttpPost, ActionName("Delete")]
@@ -99,29 +88,14 @@ namespace Forum.Controllers
             return View(await _service.GetByIdAsync(id));
         }
         
-        // [HttpPost]
-        // public async Task<IActionResult> Edit(int id, [Bind("Id, Title, Text, Author, CreatedAt")] PostModel post)
-        // {
-        //     await _service.UpdateAsync(post);
-        //     return RedirectToAction(nameof(Index));
-        // }
+        
         [HttpPost]
         public async Task<IActionResult> Edit(int id, [Bind("Id, Title, Text, Author, CreatedAt")] Post post)
         {
             await _service.UpdateAsync(post);
             return RedirectToAction(nameof(Index));
         }
-        // public async Task<IActionResult> Details(int id)
-        // {
-        //     try
-        //     {
-        //         return View(await _service.GetByIdAsync(id));
-        //     }
-        //     catch (Exception)
-        //     {
-        //         return BadRequest();
-        //     }
-        // }
+       
         public async Task<IActionResult> Create(int id)
         {
            

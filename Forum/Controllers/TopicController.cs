@@ -55,7 +55,7 @@ namespace Forum.Controllers
             {
                 Id = post.Id,
                 Topic = BuildPostListing(post),
-                Author = post.Author.UserName,
+                Author = post.Author.Name,
                 AuthorId = post.Author.Id,
                 Title = post.Title,
                 DatePosted = post.CreatedAt.ToString(CultureInfo.InvariantCulture),
@@ -87,6 +87,8 @@ namespace Forum.Controllers
             var topic = post.Topic;
             return BuildTopicList(topic);
         }
+
+      
 
     }
 }

@@ -6,7 +6,6 @@ namespace DAL.Models
     public class User : IdentityUser
     {
         public string Name { get; set; }
-        public string ProfileImage { get; set; }
         public DateTime MemberSince { get; set; }
         //public bool IsAdmin { get; set; }
     }

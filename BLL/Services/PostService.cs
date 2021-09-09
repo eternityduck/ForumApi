@@ -121,26 +121,28 @@ namespace BLL.Services
         public IEnumerable<Post> GetAll()
         {
             return _context.Posts
-                .Include(x => x.Topic).Include(x => x.Author)
-                .Include(x => x.Comments).ThenInclude(x => x.Author)
-                .ToList();
+                .Include(x => x.Author)
+                .Include(x => x.Comments).ThenInclude(x => x.Author).Include(x => x.Topic);
         }
         public async Task<Post> GetByIdAsync(int id)
         {
             return await _context.Posts.Where(x => x.Id == id)
-                .Include(post => post.Topic)
                 .Include(x => x.Author)
-                .Include(post => post.Comments).ThenInclude(x => x.Author).FirstOrDefaultAsync();
+                .Include(post => post.Comments).ThenInclude(x => x.Author)
+                .Include(post => post.Topic).FirstOrDefaultAsync();
         }
         public Post GetById(int id)
         {
             return _context.Posts.Where(post=>post.Id == id)
-                .Include(post=>post.Topic)
                 .Include(post=>post.Author)
                 .Include(post=>post.Comments).ThenInclude(reply => reply.Author)
-                .FirstOrDefault();
+                .Include(post=>post.Topic)
+                .First();
         }
-
+        public IEnumerable<Post> GetLatestPosts(int count)
+        {
+            return GetAll().OrderByDescending(p => p.CreatedAt).Take(count).ToList();
+        }
         public IEnumerable<User> GetAllUsers(IEnumerable<Post> posts)
         {
             var users = new List<User>();
@@ -157,12 +159,7 @@ namespace BLL.Services
             return users.Distinct();
         }
 
-        public IEnumerable<Post> GetLatestPosts(int count)
-        {
-            var posts = GetAll().OrderByDescending(x => x.CreatedAt);;
-            
-            return posts.Take(count);
-        }
+        
 
         public async Task AddAsync(Post model)
         {

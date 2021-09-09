@@ -4,9 +4,11 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using BLL.Interfaces;
+using DAL.Models;
 using Forum.ViewModels;
 using Forum.ViewModels.Home;
 using Forum.ViewModels.PostViewModel;
+using Forum.ViewModels.TopicViewModel;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -30,7 +32,7 @@ namespace Forum.Controllers
 
         private HomeIndexViewModel BuildHome()
         {
-            //TODO
+            
             var latest =  _postService.GetLatestPosts(10);
 
             var posts = latest.Select(x => new PostListViewModel()
@@ -41,13 +43,25 @@ namespace Forum.Controllers
                 AuthorId = x.Author.Id,
                 DatePosted = x.CreatedAt.ToString(),
                 RepliesCount = _postService.GetCommentsCount(x.Id),
-                TopicName = x.Topic.Title,
-                TopicId = x.Topic.Id
+                //Topic = BuildTopicList(x)
             });
+            
             return new HomeIndexViewModel()
             {
                 LatestPosts = posts
             };
+        }
+
+        private TopicListViewModel BuildTopicList(Post post)
+        {
+            var topic = post.Topic;
+            var topicList = new TopicListViewModel()
+            {
+                Name = topic.Title,
+                Id = topic.Id,
+                Description = topic.Description
+            };
+            return topicList;
         }
 
         [HttpPost]
