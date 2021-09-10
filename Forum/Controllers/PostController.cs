@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using BLL.Interfaces;
-using BLL.Models;
 using DAL.Models;
+using Forum.ViewModels.CommentViewModel;
 using Forum.ViewModels.PostViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -15,42 +17,63 @@ namespace Forum.Controllers
     {
         private readonly IPostService _service;
         private readonly UserManager<User> _userManager;
-        public PostController(IPostService service, UserManager<User> userManager) => 
+        private readonly ITopicService _topicService;
+        public PostController(IPostService service, UserManager<User> userManager, ITopicService topicService)
+        {
+            _topicService = topicService;
             (_service, _userManager) = (service, userManager);
-        
-        
-        public async Task<IActionResult> Index()
-        {
-            var models = await _service.GetAllAsync();
-            return View(models);
-        }
-        
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([FromForm] PostModel postModel)
-        {
-            var user = await _userManager.GetUserAsync(HttpContext.User);
-            postModel.Author = user;
-            await _service.AddAsync(postModel);
-            return RedirectToAction(nameof(Index));
-        }
-        [Authorize]
-        public IActionResult Create()
-        {
-            return View();
         }
 
-        public async Task<IActionResult> Delete(int id)
-        {
 
+        public async Task<IActionResult> Index(int id)
+        {
             var post = await _service.GetByIdAsync(id);
-            if (post == null)
+            var comments = GetComments(post).OrderBy(x => x.CreatedAt);
+            var model = new PostIndexPostViewModel()
             {
-                return NotFound();
-            }
-
-            return View(post);
+                Id = post.Id,
+                Title = post.Title,
+                Text = post.Text,
+                AuthorId = post.Author.Id,
+                AuthorName = post.Author.Name,
+                CreatedAt = post.CreatedAt,
+                Comments = comments,
+                TopicId = post.Topic.Id,
+                TopicName = post.Topic.Title
+            };
+            return View(model);
         }
+
+        private IEnumerable<CommentIndexViewModel> GetComments(Post post)
+        {
+            return post.Comments.Select(c => new CommentIndexViewModel()
+            {
+                Id = c.Id,
+                AuthorName = c.Author.Name,
+                AuthorId = c.Author.Id,
+                
+                CreatedAt = c.CreatedAt,
+                Content = c.Text
+            });
+        }
+
+
+        // [HttpPost]
+        // [ValidateAntiForgeryToken]
+        // public async Task<IActionResult> Create([FromForm] Post postModel)
+        // {
+        //     var user = await _userManager.GetUserAsync(HttpContext.User);
+        //     postModel.Author = user;
+        //     await _service.AddAsync(postModel);
+        //     return RedirectToAction(nameof(Index));
+        // }
+        // [Authorize]
+        // public IActionResult Create()
+        // {
+        //     return View();
+        // }
+
+       
 
        
         [HttpPost, ActionName("Delete")]
@@ -65,22 +88,54 @@ namespace Forum.Controllers
             return View(await _service.GetByIdAsync(id));
         }
         
+        
         [HttpPost]
-        public async Task<IActionResult> Edit(int id, [Bind("Id, Title, Text, Author, CreatedAt")] PostModel post)
+        public async Task<IActionResult> Edit(int id, [Bind("Id, Title, Text, Author, CreatedAt")] Post post)
         {
             await _service.UpdateAsync(post);
             return RedirectToAction(nameof(Index));
         }
-        public async Task<IActionResult> Details(int id)
+       
+        public async Task<IActionResult> Create(int id)
         {
-            try
+           
+            var forum = await _topicService.GetByIdAsync(id);
+
+            var model = new CreatePostViewModel()
             {
-                return View(await _service.GetByIdAsync(id));
-            }
-            catch (Exception)
+                TopicName = forum.Title,
+                TopicId = forum.Id,
+                AuthorName = User.Identity.Name,
+                
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddPost(CreatePostViewModel model)
+        {
+            var userId = _userManager.GetUserId(User);
+            var user = await _userManager.FindByIdAsync(userId);
+            var post = BuildPost(model, user);
+
+            await _service.AddAsync(post);
+            return RedirectToAction("Index", "Topic", model.TopicId);
+        }
+
+        public Post BuildPost(CreatePostViewModel post, User user)
+        {
+       
+            var topic = _topicService.GetByIdAsync(post.TopicId);
+
+            return new Post
             {
-                return BadRequest();
-            }
+                Title = post.Title,
+                Text = post.Content,
+                CreatedAt = DateTime.Now,
+                Topic = topic.Result,
+                Author = user,
+            };
         }
         
     }

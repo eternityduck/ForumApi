@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Forum.Migrations
 {
     [DbContext(typeof(ForumContext))]
-    [Migration("20210905134923_Initial")]
-    partial class Initial
+    [Migration("20210906110237_Initt")]
+    partial class Initt
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -126,6 +126,9 @@ namespace Forum.Migrations
                     b.Property<DateTimeOffset?>("LockoutEnd")
                         .HasColumnType("datetimeoffset");
 
+                    b.Property<DateTime>("MemberSince")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
@@ -145,6 +148,9 @@ namespace Forum.Migrations
 
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
+
+                    b.Property<string>("ProfileImage")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");

@@ -3,34 +3,38 @@ using System.Threading.Tasks;
 using AutoMapper;
 using BLL.Interfaces;
 using BLL.Models;
-using DAL.Interfaces;
+using DAL;
 using DAL.Models;
 
 namespace BLL.Services
 {
-    public class UserService
+    public class UserService : IUserService
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly ForumContext _context;
         private readonly Mapper _mapper;
 
-        public UserService(IUnitOfWork unitOfWork, Mapper mapper)
+        public UserService( Mapper mapper, ForumContext context)
         {
-            _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _context = context;
         }
-        public async Task<IEnumerable<UserModel>> GetAllAsync()=>
-            _mapper.Map<IEnumerable<User>, List<UserModel>>(await _unitOfWork.Users.GetAllAsync());
-
-        public async Task<UserModel> GetByIdAsync(string id)=>
-            _mapper.Map<UserModel>(await _unitOfWork.Users.GetByIdAsync(id));
-
-        public Task AddAsync(UserModel model)
+        
+        public Task<IEnumerable<User>> GetAllAsync()
         {
             throw new System.NotImplementedException();
         }
 
+        public async Task<User> GetByIdAsync(int id)
+        {
+            return await _context.Users.FindAsync(id);
+        }
 
-        public Task UpdateAsync(UserModel model)
+        public Task AddAsync(User model)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Task UpdateAsync(User model)
         {
             throw new System.NotImplementedException();
         }
