@@ -12,16 +12,14 @@
 
     <div class="row" id="postIndexContent">
         <div class="col-md-3 postAuthorContainer">
-            @* <div class="postAuthorImage" style="background-image: url(@Model.AuthorImageUrl); background-size: 100%;"></div> *@
             <a asp-controller="Account" asp-action="Details" asp-route-id="@Model.AuthorId">
             <strong>@Model.AuthorName</strong>
             </a>
             <span class="postDate">@Model.CreatedAt</span>
-            
         </div>
         <div class="col-md-9 postContentContainer">
             <div class="postContent">
-                @Html.Raw(@Model.Text)
+                @Html.Raw(Model.Text)
             </div>
         </div>
     </div>
@@ -39,7 +37,6 @@
                 {
             <div class="row replyContent">
                 <div class="col-md-3 replyAuthorContainer">
-                    @* <div class="postAuthorImage" style="background-image: url(@comment.AuthorImageUrl); background-size: 100%;"></div> *@
                     <a asp-controller="Account" asp-action="Details" asp-route-id="@comment.AuthorId">
                     <strong>@comment.AuthorName</strong>
                     </a>

@@ -18,10 +18,10 @@ namespace Forum.Controllers
         }
 
         // GET
-        public IActionResult Results(string query)
+        public IActionResult Results(string searchQuery)
         {
-            var posts = _postService.GetFilteredPosts(query).ToList();
-            var noResults = !string.IsNullOrEmpty(query) && !posts.Any();
+            var posts = _postService.GetFilteredPosts(searchQuery).ToList();
+            var noResults = !string.IsNullOrEmpty(searchQuery) && !posts.Any();
             var postList = posts.Select(x => new PostListViewModel()
             {
                 Id = x.Id,
@@ -35,7 +35,7 @@ namespace Forum.Controllers
             var result = new SearchResultViewModel
             {
                 Posts = postList,
-                SearchQuery = query,
+                SearchQuery = searchQuery,
                 EmptySearchResults = noResults
             };
             return View(result);
@@ -52,9 +52,9 @@ namespace Forum.Controllers
             return topicList;
         }
         [HttpPost]
-        public IActionResult Search(string query)
+        public IActionResult Search([FromForm] string searchQuery)
         {
-            return RedirectToAction("Results", new {query});
+            return RedirectToAction("Results", new {searchQuery});
         }
     }
 }

@@ -12,18 +12,16 @@ namespace Forum.Controllers
     {
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
-        //private readonly IUserService _userService;
+        
         public AccountController(UserManager<User> userManager, SignInManager<User> signInManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
-            //_userService = userService;
         }
 
         [HttpGet]
         public IActionResult Register()
         {
-           
             return View();
         }
 
