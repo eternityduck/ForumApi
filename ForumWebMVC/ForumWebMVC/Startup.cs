@@ -1,3 +1,7 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using AutoMapper;
 using BLL;
 using BLL.Interfaces;
@@ -6,14 +10,14 @@ using DAL;
 using DAL.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-
-namespace Forum
+namespace ForumWebMVC
 {
     public class Startup
     {
@@ -29,7 +33,7 @@ namespace Forum
         {
             services.AddDbContext<ForumContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"),
-                    b => b.MigrationsAssembly("Forum")));
+                    b => b.MigrationsAssembly("ForumWebMVC")));
 
             services.AddIdentity<User, IdentityRole>(opts =>
                 {
