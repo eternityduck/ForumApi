@@ -19,8 +19,7 @@ namespace BLL.Services
         {
             _context = context;
         }
-
-
+        
         public async Task<IEnumerable<Comment>> GetAllAsync()
         {
             return await _context.Comments.ToListAsync();
@@ -37,8 +36,7 @@ namespace BLL.Services
             await _context.Comments.AddAsync(model);
             await _context.SaveChangesAsync();
         }
-
-
+        
         public async Task DeleteByIdAsync(int modelId)
         {
             try

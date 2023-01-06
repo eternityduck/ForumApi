@@ -21,7 +21,6 @@ namespace BLL.Services
             _postService = postService;
         }
         
-        
         public async Task<IEnumerable<Topic>> GetAllAsync()
         {
             return await _context.Topics.Include(x => x.Posts).ToListAsync();
@@ -56,7 +55,7 @@ namespace BLL.Services
 
         public async Task UpdateContentAsync(int id, string desc)
         {
-            var topic =await GetByIdAsync(id);
+            var topic = await GetByIdAsync(id);
             topic.Description = desc;
             
             _context.Topics.Update(topic);

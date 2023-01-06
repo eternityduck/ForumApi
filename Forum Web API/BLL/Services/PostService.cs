@@ -14,14 +14,12 @@ namespace BLL.Services
     public class PostService : IPostService
     {
         private readonly ForumContext _context;
-       
-
+        
         public PostService( ForumContext context)
         {
             _context = context;
         }
         
-
         public async Task AddCommentAsync(Comment comment)
         {
             await _context.Comments.AddAsync(comment);
@@ -75,7 +73,6 @@ namespace BLL.Services
                 .Include(x => x.Comments).ThenInclude(x => x.Author)
                 .ToListAsync();
         }
-
         
         public async Task<Post> GetByIdAsync(int id)
         {
@@ -112,7 +109,6 @@ namespace BLL.Services
 
             return users.Distinct();
         }
-
         
         public async Task AddAsync(Post model)
         {

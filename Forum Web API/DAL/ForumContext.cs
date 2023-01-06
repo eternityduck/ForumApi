@@ -17,6 +17,11 @@ namespace DAL
         public DbSet<Comment> Comments { get; set; }
         
         public DbSet<Topic> Topics { get; set; }
+        
+        // protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        // {
+        //     optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=ForumAPI;Password=admin;Username=postgres;");
+        // }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
