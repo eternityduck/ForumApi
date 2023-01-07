@@ -31,7 +31,6 @@ namespace Forum_Web_API.Controllers
             _configuration = configuration;
         }
         
-
         [HttpPost("/Register")]
         public async Task<IActionResult> Register([FromBody] RegisterViewModel model)  
         {  
@@ -54,8 +53,6 @@ namespace Forum_Web_API.Controllers
             return Ok(new Response { Status = "Success", Message = "User created successfully!" });  
         }  
         
-        
-
         [HttpPost("/Login")]
         public async Task<IActionResult> Login([FromBody] LoginViewModel model)  
         {  
@@ -88,7 +85,6 @@ namespace Forum_Web_API.Controllers
             });
         }  
         
-
         [HttpPost("/Logout")]
         [Authorize]
         public async Task<IActionResult> Logout()
@@ -97,7 +93,6 @@ namespace Forum_Web_API.Controllers
             return RedirectToAction("Index", "Home");
         }
         
-       
         [HttpGet("/Details")]
         [Authorize]
         public async Task<ActionResult<Profile>> Details(string id)
@@ -113,6 +108,7 @@ namespace Forum_Web_API.Controllers
             };
             return model;
         }
+        
         [HttpPut("/ChangePassword")]
         [Authorize]
         public async Task<ActionResult<ChangePasswordViewModel>> ChangePassword(ChangePasswordViewModel model)
@@ -137,7 +133,6 @@ namespace Forum_Web_API.Controllers
             {
                 ModelState.AddModelError(string.Empty, "user not found");
             }
-
             return model;
         }
     }

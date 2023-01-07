@@ -7,6 +7,7 @@ namespace DAL.Models
     {
         public int Id { get; set; }
         public string Text { get; set; }
+        
         [Column(TypeName = "timestamp without time zone")]
         public DateTime CreatedAt { get; set; }
         

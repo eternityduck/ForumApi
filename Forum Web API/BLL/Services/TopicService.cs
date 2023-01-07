@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AutoMapper;
 using BLL.Interfaces;
-
 using DAL;
 using DAL.Models;
 using Microsoft.EntityFrameworkCore;
@@ -28,9 +26,14 @@ namespace BLL.Services
 
         public async Task<Topic> GetByIdAsync(int id)
         {
-            return await _context.Topics.Where(x => x.Id == id).Include(t => t.Posts).ThenInclude(x => x.Author)
-                .Include(t => t.Posts).ThenInclude(x => x.Comments).ThenInclude(x => x.Author).Include(x => x.Posts)
-                .ThenInclude(x => x.Topic).FirstOrDefaultAsync();
+            return await _context.Topics.Where(x => x.Id == id)
+                .Include(t => t.Posts)
+                .ThenInclude(x => x.Author)
+                .Include(t => t.Posts)
+                .ThenInclude(x => x.Comments).ThenInclude(x => x.Author)
+                .Include(x => x.Posts)
+                // .ThenInclude(x => x.Topic)
+                .FirstOrDefaultAsync();
         }
 
         public async Task AddAsync(Topic model)
@@ -61,7 +64,6 @@ namespace BLL.Services
             _context.Topics.Update(topic);
             await _context.SaveChangesAsync();
         }
-
         
         public Topic GetById(int id)
         {
@@ -73,7 +75,7 @@ namespace BLL.Services
                 .ThenInclude(f=>f.Comments)
                 .ThenInclude(f=>f.Author)
                 .Include(f=>f.Posts)
-                .ThenInclude(p=>p.Topic)
+                // .ThenInclude(p=>p.Topic)
                 .FirstOrDefault();
 
             if(topic is {Posts: null})
@@ -84,12 +86,7 @@ namespace BLL.Services
             return topic;
         }
 
-        public IEnumerable<Post> GetFilteredPosts(string searchQuery)
-        {
-            return _postService.GetFilteredPosts(searchQuery);
-        }
-
-        public IEnumerable<Post> GetFilteredPosts(int topicId, string searchQuery)
+        public IEnumerable<Post> GetFilteredPosts(string searchQuery, int topicId = 0)
         {
             if (topicId == 0) return _postService.GetFilteredPosts(searchQuery);
 

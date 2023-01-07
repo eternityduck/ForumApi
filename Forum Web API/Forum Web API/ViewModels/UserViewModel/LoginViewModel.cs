@@ -8,8 +8,6 @@ namespace Forum_Web_API.ViewModels.UserViewModel
         [Display(Name = "Email")]
         public string Email { get; set; }
         
-       
-         
         [Required]
         [DataType(DataType.Password)]
         [Display(Name = "Password")]

@@ -1,9 +1,6 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using AutoMapper;
 using BLL.Interfaces;
-
 using BLL.Validation;
 using DAL;
 using DAL.Models;
@@ -64,11 +61,5 @@ namespace BLL.Services
                 throw new ForumException("Invalid id");
             }
         }
-
-        // public Comment GetById(int id)
-        // {
-        //     return _context.Comments.Include(x => x.Post).ThenInclude(x => x.Topic)
-        //         .Include(x => x.Post).ThenInclude(x => x.Author).FirstOrDefault(x => x.Id == id);
-        // }
     }
 }

@@ -9,7 +9,7 @@ namespace BLL.Interfaces
     {
         Task UpdateTopicTitle(int id, string title);
         
-        IEnumerable<Post> GetFilteredPosts(int forumId, string modelSearchQuery);
+        IEnumerable<Post> GetFilteredPosts(string modelSearchQuery, int forumId);
         IEnumerable<User> GetUsers(int forumId);
         Task<IEnumerable<Post>> GetRecentPostsAsync(int id, int days);
     }

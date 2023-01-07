@@ -63,11 +63,9 @@ namespace Forum_Web_API.Controllers
         public async Task<TopicResultViewModel> Topic(int id, string searchQuery)
         {
             var topic = await _topicService.GetByIdAsync(id);
-            var posts = _topicService.GetFilteredPosts(id, searchQuery).ToList();
+            var posts = _topicService.GetFilteredPosts(searchQuery, id).ToList();
             var noResults = !string.IsNullOrEmpty(searchQuery) && !posts.Any();
             
-            
-
             var postListings = posts.Select(post => new PostListViewModel()
             {
                 Id = post.Id,

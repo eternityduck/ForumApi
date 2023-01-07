@@ -77,7 +77,7 @@ namespace Web_Api_Tests
             {
                 var postService = new PostService(ctx);
                 var topicService = new TopicService(ctx, postService);
-                var postCount = topicService.GetFilteredPosts(19, "Haskell").Count();
+                var postCount = topicService.GetFilteredPosts("Haskell",19).Count();
                 Assert.AreEqual(2, postCount);
             }
         }

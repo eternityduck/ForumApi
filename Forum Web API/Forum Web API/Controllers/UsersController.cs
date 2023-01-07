@@ -23,7 +23,6 @@ namespace Forum_Web_API.Controllers
         [HttpGet]
         public ActionResult<List<User>> Index() => _userManager.Users.ToList();
         
-
         [HttpPost("/Add")]
         public async Task<ActionResult<CreateUserViewModel>> Create(CreateUserViewModel model)
         {

@@ -19,7 +19,6 @@ namespace Forum_Web_API.Controllers
         {
             _postService = postService;
         }
-
         
         [HttpGet]
         public ActionResult<SearchResultViewModel> Results(string searchQuery)

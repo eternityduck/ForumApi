@@ -59,7 +59,6 @@ namespace Forum_Web_API.Controllers
                 Content = c.Text
             });
         }
-
         
         [HttpDelete("{id}")]
         [Authorize(Roles = "admin")]
@@ -68,7 +67,6 @@ namespace Forum_Web_API.Controllers
             await _service.DeleteByIdAsync(id);
             return NoContent();
         }
-        
         
         [HttpPut("{id}")]
         [Authorize]
@@ -81,37 +79,36 @@ namespace Forum_Web_API.Controllers
             return Ok();
         }
         
-       
         [HttpPost]
         [Authorize]
         public async Task<IActionResult> AddPost(CreatePostViewModel model)
         {
             var user = await _userManager.FindByNameAsync(model.AuthorEmail);
-            var post = BuildPost(model, user);
-
+            var post = await BuildPost(model, user);
+        
             await _service.AddAsync(post);
             return CreatedAtAction(nameof(Index), new { id = model.Id }, model);
         }
        
-        private Post BuildPost(CreatePostViewModel post, User user)
+        private async Task<Post> BuildPost(CreatePostViewModel post, User user)
         {
-       
-            var topic = _topicService.GetByIdAsync(post.TopicId);
+            var topic = await _topicService.GetByIdAsync(post.TopicId);
 
             return new Post
             {
                 Title = post.Title,
                 Text = post.Content,
                 CreatedAt = DateTime.Now,
-                Topic = topic.Result,
+                Topic = topic,
                 Author = user,
             };
         }
 
-        [HttpGet("/PostsByUser")]
+        [HttpGet("/RecentPostsByUser")]
         public async Task<IEnumerable<PostListViewModel>> GetPostsByUser(string userEmail)
         {
             var posts = await _service.GetPostsByUserEmail(userEmail);
+            var post = BuildPostListing(posts.ToArray()[0]).Result;
             var postListings = posts.Select(post => new PostListViewModel()
             {
                 Id = post.Id,

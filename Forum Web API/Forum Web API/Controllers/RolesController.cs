@@ -86,7 +86,6 @@ namespace Forum_Web_API.Controllers
             {
                 var userRoles = await _userManager.GetRolesAsync(user);
                 
-
                 var addedRoles = roles.Except(userRoles);
 
                 var removedRoles = userRoles.Except(roles);
