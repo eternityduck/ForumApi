@@ -17,6 +17,7 @@ namespace Forum_Web_API.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IPostService _postService;
+        
         public HomeController(ILogger<HomeController> logger, IPostService postService)
         {
             _logger = logger;

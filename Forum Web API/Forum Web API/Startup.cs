@@ -28,7 +28,6 @@ namespace Forum_Web_API
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers().AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
@@ -49,7 +48,6 @@ namespace Forum_Web_API
                         ".@abcdefghijklmnopqrstuvwxyz1234567890ABCDEFGHIJKLMNOPRSTUVWZYX";
                 })
                 .AddEntityFrameworkStores<ForumContext>().AddDefaultTokenProviders();  
-
             
             services.AddScoped<IPostService, PostService>();
             services.AddScoped<ICommentService, CommentService>();
@@ -60,9 +58,7 @@ namespace Forum_Web_API
                     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;  
                     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;  
                     options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;  
-                })  
-  
-                // Adding Jwt Bearer  
+                })
                 .AddJwtBearer(options =>  
                 {  
                     options.SaveToken = true;  
@@ -105,14 +101,11 @@ namespace Forum_Web_API
                                 Id = "Bearer"  
                             }  
                         },  
-                        new string[] {}  
-  
+                        new string[] {}
                     }  
                 });
                 
             });
-            
-           
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -131,12 +124,11 @@ namespace Forum_Web_API
                 });
                 
             }
+            
             app.UseHttpsRedirection();
-
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
-
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }
     }

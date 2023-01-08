@@ -15,11 +15,9 @@ namespace Web_Api_Tests
         [Test]
         public async Task Create_Topic_Creates_New_Post_Via_Context()
         {
-
             var options = new DbContextOptionsBuilder<ForumContext>()
                 .UseInMemoryDatabase("Add_Topic_Adds_Topic_To_Database").Options;
-
-
+            
             await using (var ctx = new ForumContext(options))
             {
                 var postService = new PostService(ctx);
@@ -33,14 +31,14 @@ namespace Web_Api_Tests
 
                 await topicService.AddAsync(topic);
             }
-
-
+            
             await using (var ctx = new ForumContext(options))
             {
                 Assert.AreEqual(1, ctx.Topics.CountAsync().Result);
                 Assert.AreEqual("writing functional javascript", ctx.Topics.SingleAsync().Result.Title);
             }
         }
+        
         [Test]
         public void Filtered_Posts_Returns_Correct_Result_Count()
         {
@@ -61,7 +59,7 @@ namespace Web_Api_Tests
                     Title = "Functional programming",
                     Text = "Does anyone have experience deploying Haskell to production?" 
                 });
-
+                
                 ctx.Posts.Add(new Post
                 {
                     Topic = ctx.Topics.Find(19),
@@ -166,7 +164,7 @@ namespace Web_Api_Tests
         }
 
         [Test]
-        public async Task GetFilterdPosts_Returns_CorrectPosts()
+        public async Task GetFilteredPosts_Returns_CorrectPosts()
         {
             var options = new DbContextOptionsBuilder<ForumContext>()
                 .UseInMemoryDatabase( "GetFilteredPosts_Database").Options;
@@ -180,7 +178,7 @@ namespace Web_Api_Tests
                     Description = "oldDescription",
                     Posts = new List<Post>()
                     {
-                        new Post()
+                        new ()
                         {
                             Title = "dsa",
                         }
@@ -213,7 +211,7 @@ namespace Web_Api_Tests
                     Description = "oldDescription",
                     Posts = new List<Post>()
                     {
-                        new Post()
+                        new ()
                         {
                             Title = "dsa",
                             Author = new User(),
@@ -239,20 +237,20 @@ namespace Web_Api_Tests
 
             await using (var ctx = new ForumContext(options))
             {
-                ctx.Topics.Add(new Topic()
+                ctx.Topics.Add(new Topic
                 {
                     Id = 20,
                     Title = "oldtitle",
                     Description = "oldDescription",
-                    Posts = new List<Post>()
+                    Posts = new List<Post>
                     {
-                        new Post()
+                        new ()
                         {
                             Title = "dsa",
                             Author = new User(),
                             CreatedAt = DateTime.Now
                         },
-                        new Post()
+                        new ()
                         {
                             CreatedAt = DateTime.Parse("11/11/2000")
                         }

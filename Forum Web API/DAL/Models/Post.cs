@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DAL.Models
 {
-    public class Post
+    public sealed class Post
     {
         public int Id { get; set; }
         public string Title { get; set; }

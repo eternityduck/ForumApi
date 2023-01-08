@@ -9,6 +9,5 @@ namespace Forum_Web_API.ViewModels.UserViewModel
         public string Name { get; set; }
         public string Email { get; set; }
         public DateTime AccountCreatedAt { get; set; }
-        
     }
 }

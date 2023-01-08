@@ -34,12 +34,10 @@ namespace Forum_Web_API.Controllers
             {
                 return RedirectToAction("Index");
             }
-
             foreach (var error in result.Errors)
             {
                 ModelState.AddModelError(string.Empty, error.Description);
             }
-
             return model;
         }
         [HttpGet("/User/{id}")]
@@ -62,19 +60,16 @@ namespace Forum_Web_API.Controllers
             user.Email = model.Email;
             user.UserName = model.Email;
             user.Name = model.Name;
-
-
+            
             var result = await _userManager.UpdateAsync(user);
             if (result.Succeeded)
             {
                 return Ok("Successfully edited user");
             }
-
             foreach (var error in result.Errors)
             {
                 ModelState.AddModelError(string.Empty, error.Description);
             }
-
             return model;
         }
 
@@ -89,7 +84,5 @@ namespace Forum_Web_API.Controllers
         
             return Ok("Successfully deleted");
         }
-        
-        
     }
 }

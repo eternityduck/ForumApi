@@ -51,7 +51,6 @@ namespace Forum_Web_API.Controllers
             if (role == null) return BadRequest("Incorrect Id");
             await _roleManager.DeleteAsync(role);
             return Ok("Successfully deleted");
-
         }
 
         [HttpGet("/Roles/Users")]

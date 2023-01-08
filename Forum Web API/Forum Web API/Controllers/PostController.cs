@@ -23,6 +23,7 @@ namespace Forum_Web_API.Controllers
         private readonly IPostService _service;
         private readonly UserManager<User> _userManager;
         private readonly ITopicService _topicService;
+        
         public PostController(IPostService service, UserManager<User> userManager, ITopicService topicService)
         {
             _topicService = topicService;
