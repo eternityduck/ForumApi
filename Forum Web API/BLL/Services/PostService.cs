@@ -51,42 +51,36 @@ namespace BLL.Services
             }
         }
 
-        public async Task<IEnumerable<Post>> GetPostsByUserEmail(string userEmail)
-        {
-            var result = await _context.Posts.Where(x => x.Author.Email == userEmail).ToListAsync();
-            return result;
-        }
+        public async Task<IEnumerable<Post>> GetPostsByUserEmail(string userEmail) =>
+            await _context.Posts.Where(x => x.Author.Email == userEmail).ToListAsync();
 
-        public async Task<IEnumerable<Post>> GetPostsByTopicId(int id)
+        public async Task<IEnumerable<Post>> GetPostsByTopicId(int id) 
         {
             var result = await _context.Topics.Include(x => x.Posts).FirstOrDefaultAsync(x => x.Id == id);
             return result.Posts;
         }
         
 
-        public async Task<IEnumerable<Post>> GetAllAsync()
-        {
-            return await _context.Posts
+        public async Task<IEnumerable<Post>> GetAllAsync() => 
+            await _context.Posts
                 .Include(x => x.Topic).Include(x => x.Author)
                 .Include(x => x.Comments).ThenInclude(x => x.Author)
                 .ToListAsync();
-        }
         
-        public async Task<Post> GetByIdAsync(int id)
-        {
-            return await _context.Posts.Where(x => x.Id == id)
+        
+        public async Task<Post> GetByIdAsync(int id) =>
+            await _context.Posts.Where(x => x.Id == id)
                 .Include(x => x.Author)
                 .Include(post => post.Comments).ThenInclude(x => x.Author)
                 .Include(post => post.Topic).FirstOrDefaultAsync();
-        }
-        public Post GetById(int id)
-        {
-            return _context.Posts.Where(post=>post.Id == id)
+        
+        public Post GetById(int id) => 
+            _context.Posts.Where(post=>post.Id == id)
                 .Include(post=>post.Author)
                 .Include(post=>post.Comments).ThenInclude(reply => reply.Author)
                 .Include(post=>post.Topic)
                 .First();
-        }
+        
         public async Task<IEnumerable<Post>> GetLatestPosts(int count)
         {
             var result = await GetAllAsync();

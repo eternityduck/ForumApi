@@ -10,24 +10,19 @@ namespace BLL.Services
 {
     public class CommentService : ICommentService
     {
-        
         private readonly ForumContext _context;
         public CommentService(ForumContext context)
         {
             _context = context;
         }
         
-        public async Task<IEnumerable<Comment>> GetAllAsync()
-        {
-            return await _context.Comments.ToListAsync();
-        }
-
-        public async Task<Comment> GetByIdAsync(int id)
-        {
-            return await _context.Comments.Include(x => x.Post).ThenInclude(x => x.Topic)
+        public async Task<IEnumerable<Comment>> GetAllAsync() => 
+            await _context.Comments.ToListAsync();
+        
+        public async Task<Comment> GetByIdAsync(int id) => 
+            await _context.Comments.Include(x => x.Post).ThenInclude(x => x.Topic)
                 .Include(x => x.Post).ThenInclude(x => x.Author).FirstOrDefaultAsync(x => x.Id == id);
-        }
-
+        
         public async Task AddAsync(Comment model)
         {
             await _context.Comments.AddAsync(model);

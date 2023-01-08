@@ -19,14 +19,10 @@ namespace BLL.Services
             _postService = postService;
         }
         
-        public async Task<IEnumerable<Topic>> GetAllAsync()
-        {
-            return await _context.Topics.Include(x => x.Posts).ToListAsync();
-        }
-
-        public async Task<Topic> GetByIdAsync(int id)
-        {
-            return await _context.Topics.Where(x => x.Id == id)
+        public async Task<IEnumerable<Topic>> GetAllAsync() =>
+            await _context.Topics.Include(x => x.Posts).ToListAsync();
+        
+        public async Task<Topic> GetByIdAsync(int id) => await _context.Topics.Where(x => x.Id == id)
                 .Include(t => t.Posts)
                 .ThenInclude(x => x.Author)
                 .Include(t => t.Posts)
@@ -34,7 +30,7 @@ namespace BLL.Services
                 .Include(x => x.Posts)
                 // .ThenInclude(x => x.Topic)
                 .FirstOrDefaultAsync();
-        }
+        
 
         public async Task AddAsync(Topic model)
         {
@@ -50,7 +46,7 @@ namespace BLL.Services
 
         public async Task UpdateTopicTitle(int id, string title)
         {
-            var topic =await GetByIdAsync(id);
+            var topic = await GetByIdAsync(id);
             topic.Title = title;
             _context.Topics.Update(topic);
             await _context.SaveChangesAsync();

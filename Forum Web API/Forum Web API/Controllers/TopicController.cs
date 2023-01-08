@@ -58,7 +58,7 @@ namespace Forum_Web_API.Controllers
 
             return Ok("Successfully updated the topic title");
         }
-        [Route("/Topic/{id}/{searchQuery?}")]
+        [Route("/Topic/{id}")]
         [HttpGet]
         public async Task<TopicResultViewModel> Topic(int id, string searchQuery)
         {

@@ -8,7 +8,6 @@ namespace BLL.Interfaces
     public interface IPostService : ICrud<Post>
     {
         Task AddCommentAsync(Comment comment);
-        
         int GetCommentsCount(int id);
         Task<IEnumerable<Post>> GetPostsByUserEmail(string userEmail);
         Task<IEnumerable<Post>> GetPostsByTopicId(int id);
