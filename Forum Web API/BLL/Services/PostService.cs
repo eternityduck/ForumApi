@@ -89,16 +89,16 @@ namespace BLL.Services
         public IEnumerable<User> GetAllUsers(IEnumerable<Post> posts)
         {
             var users = new List<User>();
-
+        
             foreach(var post in posts)
             {
                 users.Add(post.Author);
-
+        
                 if (post.Comments == null) continue;
-
+        
                 users.AddRange(post.Comments.Select(reply => reply.Author));
             }
-
+        
             return users.Distinct();
         }
         
@@ -120,7 +120,6 @@ namespace BLL.Services
             {
                 throw new ForumException("Invalid id");
             }
-            
         }
 
         public IEnumerable<Post> GetFilteredPosts(string searchQuery)
