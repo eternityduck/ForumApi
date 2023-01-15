@@ -1,9 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AutoMapper;
 using BLL.Interfaces;
-
 using BLL.Validation;
 using DAL;
 using DAL.Models;
@@ -14,14 +12,12 @@ namespace BLL.Services
     public class PostService : IPostService
     {
         private readonly ForumContext _context;
-       
-
+        
         public PostService( ForumContext context)
         {
             _context = context;
         }
         
-
         public async Task AddCommentAsync(Comment comment)
         {
             await _context.Comments.AddAsync(comment);
@@ -55,43 +51,36 @@ namespace BLL.Services
             }
         }
 
-        public async Task<IEnumerable<Post>> GetPostsByUserEmail(string userEmail)
-        {
-            var result = await _context.Posts.Where(x => x.Author.Email == userEmail).ToListAsync();
-            return result;
-        }
+        public async Task<IEnumerable<Post>> GetPostsByUserEmail(string userEmail) =>
+            await _context.Posts.Where(x => x.Author.Email == userEmail).ToListAsync();
 
-        public async Task<IEnumerable<Post>> GetPostsByTopicId(int id)
+        public async Task<IEnumerable<Post>> GetPostsByTopicId(int id) 
         {
             var result = await _context.Topics.Include(x => x.Posts).FirstOrDefaultAsync(x => x.Id == id);
             return result.Posts;
         }
         
 
-        public async Task<IEnumerable<Post>> GetAllAsync()
-        {
-            return await _context.Posts
+        public async Task<IEnumerable<Post>> GetAllAsync() => 
+            await _context.Posts
                 .Include(x => x.Topic).Include(x => x.Author)
                 .Include(x => x.Comments).ThenInclude(x => x.Author)
                 .ToListAsync();
-        }
-
         
-        public async Task<Post> GetByIdAsync(int id)
-        {
-            return await _context.Posts.Where(x => x.Id == id)
+        
+        public async Task<Post> GetByIdAsync(int id) =>
+            await _context.Posts.Where(x => x.Id == id)
                 .Include(x => x.Author)
                 .Include(post => post.Comments).ThenInclude(x => x.Author)
                 .Include(post => post.Topic).FirstOrDefaultAsync();
-        }
-        public Post GetById(int id)
-        {
-            return _context.Posts.Where(post=>post.Id == id)
+        
+        public Post GetById(int id) => 
+            _context.Posts.Where(post=>post.Id == id)
                 .Include(post=>post.Author)
                 .Include(post=>post.Comments).ThenInclude(reply => reply.Author)
                 .Include(post=>post.Topic)
                 .First();
-        }
+        
         public async Task<IEnumerable<Post>> GetLatestPosts(int count)
         {
             var result = await GetAllAsync();
@@ -100,19 +89,18 @@ namespace BLL.Services
         public IEnumerable<User> GetAllUsers(IEnumerable<Post> posts)
         {
             var users = new List<User>();
-
+        
             foreach(var post in posts)
             {
                 users.Add(post.Author);
-
+        
                 if (post.Comments == null) continue;
-
+        
                 users.AddRange(post.Comments.Select(reply => reply.Author));
             }
-
+        
             return users.Distinct();
         }
-
         
         public async Task AddAsync(Post model)
         {
@@ -132,7 +120,6 @@ namespace BLL.Services
             {
                 throw new ForumException("Invalid id");
             }
-            
         }
 
         public IEnumerable<Post> GetFilteredPosts(string searchQuery)

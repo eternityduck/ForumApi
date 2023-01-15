@@ -58,16 +58,14 @@ namespace Forum_Web_API.Controllers
 
             return Ok("Successfully updated the topic title");
         }
-        [Route("/Topic/{id}/{searchQuery?}")]
+        [Route("/Topic/{id}")]
         [HttpGet]
         public async Task<TopicResultViewModel> Topic(int id, string searchQuery)
         {
             var topic = await _topicService.GetByIdAsync(id);
-            var posts = _topicService.GetFilteredPosts(id, searchQuery).ToList();
+            var posts = _topicService.GetFilteredPosts(searchQuery, id).ToList();
             var noResults = !string.IsNullOrEmpty(searchQuery) && !posts.Any();
             
-            
-
             var postListings = posts.Select(post => new PostListViewModel()
             {
                 Id = post.Id,

@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-
 using DAL.Models;
 
 namespace BLL.Interfaces

@@ -24,6 +24,7 @@ namespace Forum_Web_API.Controllers
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
         private readonly IConfiguration _configuration;
+        
         public AccountController(UserManager<User> userManager, SignInManager<User> signInManager, IConfiguration configuration)
         {
             _userManager = userManager;
@@ -31,7 +32,6 @@ namespace Forum_Web_API.Controllers
             _configuration = configuration;
         }
         
-
         [HttpPost("/Register")]
         public async Task<IActionResult> Register([FromBody] RegisterViewModel model)  
         {  
@@ -48,14 +48,11 @@ namespace Forum_Web_API.Controllers
                 MemberSince = DateTime.Now
             };  
             var result = await _userManager.CreateAsync(user, model.Password);  
-            if (!result.Succeeded)  
-                return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "User creation failed! Please check user details and try again." });  
-  
-            return Ok(new Response { Status = "Success", Message = "User created successfully!" });  
+            return !result.Succeeded ?
+                StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "User creation failed! Please check user details and try again." }) 
+                : Ok(new Response { Status = "Success", Message = "User created successfully!" });
         }  
         
-        
-
         [HttpPost("/Login")]
         public async Task<IActionResult> Login([FromBody] LoginViewModel model)  
         {  
@@ -88,7 +85,6 @@ namespace Forum_Web_API.Controllers
             });
         }  
         
-
         [HttpPost("/Logout")]
         [Authorize]
         public async Task<IActionResult> Logout()
@@ -97,7 +93,6 @@ namespace Forum_Web_API.Controllers
             return RedirectToAction("Index", "Home");
         }
         
-       
         [HttpGet("/Details")]
         [Authorize]
         public async Task<ActionResult<Profile>> Details(string id)
@@ -113,12 +108,13 @@ namespace Forum_Web_API.Controllers
             };
             return model;
         }
+        
         [HttpPut("/ChangePassword")]
         [Authorize]
         public async Task<ActionResult<ChangePasswordViewModel>> ChangePassword(ChangePasswordViewModel model)
         {
             if (!ModelState.IsValid) return model;
-            User user = await _userManager.FindByIdAsync(model.Id);
+            User user = await _userManager.FindByEmailAsync(model.Email);
             if (user != null)
             {
                 IdentityResult result =
@@ -137,7 +133,6 @@ namespace Forum_Web_API.Controllers
             {
                 ModelState.AddModelError(string.Empty, "user not found");
             }
-
             return model;
         }
     }

@@ -13,16 +13,13 @@ namespace Web_Api_Tests
 {
     public class PostServiceTests
     {
-
-
         [Test]
         public async Task Create_Post_Creates_New_Post_Via_Context()
         {
 
             var options = new DbContextOptionsBuilder<ForumContext>()
                 .UseInMemoryDatabase("Add_Post_Writes_Post_To_Database").Options;
-
-
+            
             await using (var ctx = new ForumContext(options))
             {
                 var postService = new PostService(ctx);
@@ -35,8 +32,7 @@ namespace Web_Api_Tests
 
                 await postService.AddAsync(post);
             }
-
-
+            
             await using (var ctx = new ForumContext(options))
             {
                 Assert.AreEqual(1, ctx.Posts.CountAsync().Result);
@@ -66,7 +62,6 @@ namespace Web_Api_Tests
             }
         }
         
-
         [Test]
         public async Task Checking_Reply_Count_Returns_Number_Of_Replies()
         {
@@ -151,6 +146,7 @@ namespace Web_Api_Tests
                 Assert.AreEqual("Post 1", result.ToList()[0].Title);
             }
         }
+        
         [Test]
         public async Task GetPostsByUserId_Returns_CorrectPosts()
         {

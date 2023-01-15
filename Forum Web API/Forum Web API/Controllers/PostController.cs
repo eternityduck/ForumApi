@@ -23,6 +23,7 @@ namespace Forum_Web_API.Controllers
         private readonly IPostService _service;
         private readonly UserManager<User> _userManager;
         private readonly ITopicService _topicService;
+        
         public PostController(IPostService service, UserManager<User> userManager, ITopicService topicService)
         {
             _topicService = topicService;
@@ -59,7 +60,6 @@ namespace Forum_Web_API.Controllers
                 Content = c.Text
             });
         }
-
         
         [HttpDelete("{id}")]
         [Authorize(Roles = "admin")]
@@ -69,7 +69,6 @@ namespace Forum_Web_API.Controllers
             return NoContent();
         }
         
-        
         [HttpPut("{id}")]
         [Authorize]
         public async Task<IActionResult> Edit(string userEmail, int id, string content)
@@ -78,40 +77,39 @@ namespace Forum_Web_API.Controllers
             var comment = await _service.GetByIdAsync(id);
             if (comment == null || user.Id != comment.Author.Id) return BadRequest("The comment is null or you are not the owner of comment");
             await _service.UpdateContentAsync(id, content);
-            return Ok();
+            return Ok("Successfully edited post");
         }
         
-       
         [HttpPost]
         [Authorize]
         public async Task<IActionResult> AddPost(CreatePostViewModel model)
         {
             var user = await _userManager.FindByNameAsync(model.AuthorEmail);
-            var post = BuildPost(model, user);
-
+            var post = await BuildPost(model, user);
+            
             await _service.AddAsync(post);
-            return CreatedAtAction(nameof(Index), new { id = model.Id }, model);
+            return CreatedAtAction(nameof(Index), new { id = post.Id }, model);
         }
        
-        private Post BuildPost(CreatePostViewModel post, User user)
+        private async Task<Post> BuildPost(CreatePostViewModel post, User user)
         {
-       
-            var topic = _topicService.GetByIdAsync(post.TopicId);
+            var topic = await _topicService.GetByIdAsync(post.TopicId);
 
             return new Post
             {
                 Title = post.Title,
                 Text = post.Content,
                 CreatedAt = DateTime.Now,
-                Topic = topic.Result,
+                Topic = topic,
                 Author = user,
             };
         }
 
-        [HttpGet("/PostsByUser")]
+        [HttpGet("/RecentPostsByUser")]
         public async Task<IEnumerable<PostListViewModel>> GetPostsByUser(string userEmail)
         {
             var posts = await _service.GetPostsByUserEmail(userEmail);
+            var post = BuildPostListing(posts.ToArray()[0]).Result;
             var postListings = posts.Select(post => new PostListViewModel()
             {
                 Id = post.Id,
@@ -124,7 +122,8 @@ namespace Forum_Web_API.Controllers
             });
             return postListings;
         }
-        [HttpGet("/PostsByTopic")]
+        
+        [HttpGet("/RecentPostsByTopic")]
         public async Task<IEnumerable<PostListViewModel>> GetPostsByTopic(int id)
         {
             var posts = await _service.GetPostsByTopicId(id);

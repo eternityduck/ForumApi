@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace DAL
 {
-    public class RoleInitializer
+    public static class RoleInitializer
     {
         public static async Task InitializeAsync(UserManager<User> userManager, RoleManager<IdentityRole> roleManager)
         {
