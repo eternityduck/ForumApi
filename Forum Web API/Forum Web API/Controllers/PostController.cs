@@ -77,7 +77,7 @@ namespace Forum_Web_API.Controllers
             var comment = await _service.GetByIdAsync(id);
             if (comment == null || user.Id != comment.Author.Id) return BadRequest("The comment is null or you are not the owner of comment");
             await _service.UpdateContentAsync(id, content);
-            return Ok();
+            return Ok("Successfully edited post");
         }
         
         [HttpPost]
@@ -86,9 +86,9 @@ namespace Forum_Web_API.Controllers
         {
             var user = await _userManager.FindByNameAsync(model.AuthorEmail);
             var post = await BuildPost(model, user);
-        
+            
             await _service.AddAsync(post);
-            return CreatedAtAction(nameof(Index), new { id = model.Id }, model);
+            return CreatedAtAction(nameof(Index), new { id = post.Id }, model);
         }
        
         private async Task<Post> BuildPost(CreatePostViewModel post, User user)
@@ -122,7 +122,8 @@ namespace Forum_Web_API.Controllers
             });
             return postListings;
         }
-        [HttpGet("/PostsByTopic")]
+        
+        [HttpGet("/RecentPostsByTopic")]
         public async Task<IEnumerable<PostListViewModel>> GetPostsByTopic(int id)
         {
             var posts = await _service.GetPostsByTopicId(id);

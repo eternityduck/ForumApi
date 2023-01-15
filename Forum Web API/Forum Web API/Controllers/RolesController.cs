@@ -84,18 +84,14 @@ namespace Forum_Web_API.Controllers
             if (user != null)
             {
                 var userRoles = await _userManager.GetRolesAsync(user);
-                
                 var addedRoles = roles.Except(userRoles);
-
                 var removedRoles = userRoles.Except(roles);
 
                 await _userManager.AddToRolesAsync(user, addedRoles);
-
                 await _userManager.RemoveFromRolesAsync(user, removedRoles);
 
                 return Ok($"Successfully updated the role list of {user.Name}");
             }
-
             return NotFound();
         }
     }

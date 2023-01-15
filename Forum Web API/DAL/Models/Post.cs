@@ -6,7 +6,7 @@ namespace DAL.Models
 {
     public sealed class Post
     {
-        public int Id { get; set; }
+        public int Id { get; init; }
         public string Title { get; set; }
         public string Text { get; set; }
         [Column(TypeName = "timestamp without time zone")]

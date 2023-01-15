@@ -9,6 +9,6 @@ namespace DAL.Models
     {
         public string Name { get; set; }
         [Column(TypeName = "timestamp without time zone")]
-        public DateTime MemberSince { get; set; }
+        public DateTime MemberSince { get; init; }
     }
 }

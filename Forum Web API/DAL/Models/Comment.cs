@@ -5,7 +5,7 @@ namespace DAL.Models
 {
     public sealed class Comment
     {
-        public int Id { get; set; }
+        public int Id { get; init; }
         public string Text { get; set; }
         [Column(TypeName = "timestamp without time zone")]
         public DateTime CreatedAt { get; set; }

@@ -114,7 +114,7 @@ namespace Forum_Web_API.Controllers
         public async Task<ActionResult<ChangePasswordViewModel>> ChangePassword(ChangePasswordViewModel model)
         {
             if (!ModelState.IsValid) return model;
-            User user = await _userManager.FindByIdAsync(model.Id);
+            User user = await _userManager.FindByEmailAsync(model.Email);
             if (user != null)
             {
                 IdentityResult result =
